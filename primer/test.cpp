@@ -1,6 +1,8 @@
 #include <iostream>
+#include <fstream>
 using namespace std;
 #include <vector>
+#include <string>
 
 double get()
 {
@@ -27,7 +29,18 @@ double get()
         return (res[res.size() / 2] + res[res.size() / 2 - 1]) / 2.0;
 }
 
+class Text {
+public:
+    Text(const ifstream &x);
+    Text(const string &s);
+};
+
 int main()
 {
     cout << get() << endl;
+    ifstream infile("233.txt");
+    Text t(infile);
+    Text t2(ifstream(string("2333")));
+    Text t3("2333");
+    Text t4(string("2333"));
 }

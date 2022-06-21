@@ -1,46 +1,35 @@
+#include <queue>
+#include <unordered_map>
 #include <iostream>
-#include <fstream>
-using namespace std;
 #include <vector>
 #include <string>
+#include <algorithm>
+using namespace std;
 
-double get()
-{
-    vector<int> res, nums1{1, 2}, nums2{3, 4};
-    auto it1 = nums1.begin(), it2 = nums2.begin();
-    while (it1 != nums1.end() && it2 != nums2.end())
+bool backtracking(vector<int> &nums, int startIndex, int sum)
     {
-        if (*it1 < *it2)
-        {
-            res.push_back(*it1);
-            ++it1;
+        for (int i = startIndex; i < nums.size() && nums[i] <= sum; ++i) {
+            if (nums[i] == sum)
+                return true;
+            if (nums[i] < sum && backtracking(nums, i+1, sum - nums[i]))
+                return true;
         }
-        else
-        {
-            res.push_back(*it2);
-            ++it2;
-        }
+        return false;
     }
-    res.insert(res.end(), it1, nums1.end());
-    res.insert(res.end(), it2, nums2.end());
-    if (res.size() % 2)
-        return res[res.size() / 2];
-    else
-        return (res[res.size() / 2] + res[res.size() / 2 - 1]) / 2.0;
+bool canPartition(vector<int>& nums) {
+    int sum = 0;
+    for_each(nums.begin(), nums.end(), [&](const int lhs){sum += lhs;});
+    if (sum & 1)
+        return false;
+    sum = sum >> 1;
+    sort(nums.begin(), nums.end());
+    return backtracking(nums, 0, sum);
 }
-
-class Text {
-public:
-    Text(const ifstream &x);
-    Text(const string &s);
-};
 
 int main()
 {
-    cout << get() << endl;
-    ifstream infile("233.txt");
-    Text t(infile);
-    Text t2(ifstream(string("2333")));
-    Text t3("2333");
-    Text t4(string("2333"));
+    vector<int> ivec{1, 2, 3, 4, 5, 6, 7};
+    auto x = canPartition(ivec);
+    cout << (x ? "true" : "false");
+    return 0;
 }
